@@ -1,0 +1,20 @@
+<ul class="domiwka" isotope-container="isotope-container">
+	<li class="media" ng-repeat="item in news" ng-class="getClass($index)" isotope-item>
+		<a class="media-media" href="#/about/{{item.id}}" style="background-image: url('{{getImgSrc(item)}}')">
+		</a>
+		<div class="media-body">
+			<h4 class="media-heading">{{item.name}}</h4>
+			<ng-if="item.message">
+				<p ng-bind-html="item.message|linky"></p>
+			</ng-if>
+			<ng-if="!item.message">
+				<p ng-bind-html="item.attachment.description|linky"></p>
+			</ng-if>
+			<ng-if="!item.message && !item.attachment.description.length">
+				<p ng-bind-html="item.attachment.caption|linky"></p>
+			</ng-if>
+			<p>{{item.name}}</p>
+			<a href="{{item.permalink}}">go to facebook</a>
+		</div>
+	</li>
+</ul>

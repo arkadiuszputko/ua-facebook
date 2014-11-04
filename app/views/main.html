@@ -1,0 +1,13 @@
+<ul class="domiwka">
+  <li class="media" ng-repeat="item in latest">
+    <a class="media-media" href="#/about/{{item.page.id}}">
+      <img style="width: 100%" ng-src="{{getImage($index)}}" />
+    </a>
+    <div class="media-body">
+      <h4 class="media-heading">{{item.news.name}}</h4>
+      <p ng-bind-html="getMessage($index) | linky"></p>
+      <p>{{item.page.name}}</p>
+      <a href="{{item.news.permalink}}">go to facebook</a>
+    </div>
+  </li>
+</ul>
