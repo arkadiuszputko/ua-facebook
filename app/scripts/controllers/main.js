@@ -8,21 +8,25 @@
  * Controller of the uaFacebookApp
  */
 angular.module('uaFacebookApp')
-  .controller('MainCtrl', function ($scope, $sce, fbService) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('MainCtrl', function ($scope, $sce, $facebook, fbService) {
+    $scope.isLoggedIn = false;
+    $scope.login = function () {
+        $facebook.login().then(function(response) {
+            getData();
+        });
+    };
 
-    fbService.getLatest().then(
-    	function (response) {
-    		$scope.latest = response;
-    	},
-    	function (err) {
-    		console.log(err);
-    	}
-    );
+    var getData = function () {
+        fbService.getLatest().then(
+            function (response) {
+                $scope.latest = response;
+                $scope.isLoggedIn = true;
+            },
+            function (err) {
+                console.log(err);
+            }
+        );
+    }
 
     $scope.getMessage = function (i) {
     	var msg = '';
@@ -38,6 +42,8 @@ angular.module('uaFacebookApp')
 
     $scope.getImage = function (i) {
     	return $sce.trustAsHtml($scope.latest[i].news.attachment.media[0].src);
-    }
+    };
+
+    getData();
 
   });

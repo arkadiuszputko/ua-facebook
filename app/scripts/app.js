@@ -21,8 +21,8 @@ angular
     'uaFacebookApp.fbService'
   ])
   .config( function( $facebookProvider ) {
-    $facebookProvider.setAppId('140055362726064');
-    $facebookProvider.setPermissions("email,user_likes,read_streamt");
+    $facebookProvider.setAppId('291288937551399');
+    $facebookProvider.setPermissions("email,user_likes,read_stream");
   })
   .config(function ($routeProvider) {
     $routeProvider
