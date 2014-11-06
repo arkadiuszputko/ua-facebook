@@ -18,10 +18,13 @@ angular
     'ngTouch',
     'ngFacebook',
     'iso.directives',
+    'wu.masonry',
+    'ui.bootstrap',
+    'youtube-embed',
     'uaFacebookApp.fbService'
   ])
   .config( function( $facebookProvider ) {
-    $facebookProvider.setAppId('291288937551399');
+    $facebookProvider.setAppId('140055362726064');
     $facebookProvider.setPermissions("email,user_likes,read_stream");
   })
   .config(function ($routeProvider) {

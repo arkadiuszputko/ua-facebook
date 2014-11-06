@@ -1,20 +1,73 @@
-<ul class="domiwka" isotope-container="isotope-container">
-	<li class="media" ng-repeat="item in news" ng-class="getClass($index)" isotope-item>
-		<a class="media-media" href="#/about/{{item.id}}" style="background-image: url('{{getImgSrc(item)}}')">
-		</a>
-		<div class="media-body">
-			<h4 class="media-heading">{{item.name}}</h4>
-			<ng-if="item.message">
-				<p ng-bind-html="item.message|linky"></p>
-			</ng-if>
-			<ng-if="!item.message">
-				<p ng-bind-html="item.attachment.description|linky"></p>
-			</ng-if>
-			<ng-if="!item.message && !item.attachment.description.length">
-				<p ng-bind-html="item.attachment.caption|linky"></p>
-			</ng-if>
-			<p>{{item.name}}</p>
-			<a href="{{item.permalink}}">go to facebook</a>
+<div class="main-content col-md-8">
+	<div class="cover" style="background-image: url('{{page.cover.source}}')"></div>
+	<tabset>
+		<tab heading="feed">
+			<div class="block">
+			    <div class="search">
+			      <input type="text" class="form-control" placeholder="search" ng-model="searchNews" />
+			    </div>
+			  </div>
+			<div class="block">
+				<ul class="domiwka">
+					<li class="media" ng-repeat="item in page.feed | filter:searchNews" ng-class="getClass(item)" ng-click="toggle(item)">
+						<a ng-if="item.picture" class="media-media" style="background-image: url('{{item.picture}}')">
+						</a>
+						<a ng-if="!item.picture" class="media-media" style="background-image: url('{{page.picture.data.url}}')">
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading">{{item.name}}</h4>
+							<p ng-hide="item.full" ng-bind-html="item.display_message"></p>
+							<div class="full" ng-show="item.full">
+								<p ng-bind-html="item.display_message | linky"></p>
+								<div ng-if="item.type === 'photo'">
+									<img ng-src="{{item.picture_url}}" />
+								</div>
+								<div ng-if="item.type === 'video'">
+									<youtube-video video-url="item.source"></youtube-video>
+								</div>
+								<div ng-if="item.type === 'link'">
+									<p ng-bind-html="item.link | linky"></p>
+								</div>
+								<div ng-if="item.type === 'status'">
+									<p ng-bind-html="item.from.name"></p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</tab>
+		<tab heading="photos" ng-if="page.albums">
+			<div class="bricks block">
+				<a href="photo.link" target="_blank" class="brick" ng-repeat="photo in page.albums.data">
+					<img ng-src="{{getCoverPhoto(photo)}}" />
+					<p class="info">{{photo.name}}</p>
+				</a>
+			</div>
+		</tab>
+		<tab heading="events" ng-if="page.events">
+			<div class="bricks block">
+				<a href="event.link" class="brick" ng-repeat="event in page.events.data">
+					<img ng-src="{{getCoverPhoto(event)}}" />
+					<p class="info">{{photo.name}}</p>
+				</a>
+			</div>
+		</tab>
+	</tabset>
+</div>
+<div class="sub-content page col-md-4">
+	<div class="block info">
+		<div class="picture">
+			<img ng-src="{{page.picture.data.url}}" />
 		</div>
-	</li>
-</ul>
+		<div class="likes">
+			{{page.likes}}
+		</div>
+		<div class="name">
+			{{page.name}}
+		</div>
+		<div class="about">
+			{{page.about}}
+		</div>
+	</div>
+</div>

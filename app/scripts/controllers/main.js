@@ -21,6 +21,7 @@ angular.module('uaFacebookApp')
             function (response) {
                 $scope.latest = response;
                 $scope.isLoggedIn = true;
+                console.log($scope.latest); 
             },
             function (err) {
                 console.log(err);
@@ -28,21 +29,10 @@ angular.module('uaFacebookApp')
         );
     }
 
-    $scope.getMessage = function (i) {
-    	var msg = '';
-    	if ($scope.latest[i].news.message.length) {
-    		msg = $scope.latest[i].news.message;
-    	} else if (!$scope.latest[i].news.message.length && $scope.latest[i].news.attachment.description) {
-    		msg = $scope.latest[i].news.attachment.description;
-    	} else {
-    		msg = $scope.latest[i].news.attachment.caption;
-    	}
-    	return msg;
+    $scope.getClass = function (item) {
+        return item.news.cssClass.join(' ');
     };
 
-    $scope.getImage = function (i) {
-    	return $sce.trustAsHtml($scope.latest[i].news.attachment.media[0].src);
-    };
 
     getData();
 

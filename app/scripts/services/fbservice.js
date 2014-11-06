@@ -47,21 +47,11 @@ angular.module('uaFacebookApp.fbService', ['ngResource', 'ngFacebook'])
 		};
 
 		var getFeed = function (id) {
-			return $facebook.api({
-				method: 'fql.query', 
-				query: 'SELECT post_id, actor_id, target_id, type, message, permalink, attachment FROM stream WHERE source_id='+ id + ' AND type IN (46, 56, 60, 66, 80, 128, 247, 295, 373)',
-				return_ssl_resources: 1
-			});
+			return $facebook.api('/' + id + '/feed');
 		};
 
-		var getFeeds = function () {
-			var promises = [],
-				l = pages.length;
-			for (var i = 0; i < l; i++) {
-				promises.push(getFeed(pages[i].id));
-			}
-
-			return $q.all(promises);
+		var getFeeds = function (ids) {
+			return $facebook.api('/', {ids: ids, fields: 'feed, cover, events, photos, albums, picture, likes, link, name, about'});
 		};
 
 		var getPageDataByPostId = function (id) {
@@ -91,65 +81,115 @@ angular.module('uaFacebookApp.fbService', ['ngResource', 'ngFacebook'])
 		};
 
 		var getLatest = function () {
-			var	deferred = $q.defer();
+			var	deferred = $q.defer(),
+				ids = [];
+
 			if (latest.length) {
 				deferred.resolve(latest);
 			} else {
-				getFeeds().then(function (response) {
-					angular.forEach(response, function (result) {
-						pages[getPageIndexById(getPageDataByPostId(result[0].post_id).id)].feed = result;
-						latest.push({
-							page: getPageDataByPostId(result[0].post_id),
-							news: result[0]
-						});
-						console.log(result);
-					});
-					deferred.resolve(latest);
-				});
+				angular.forEach(pages, function (page) {ids.push(page.id)});
+				getFeeds(ids.join(',')).then(
+					function (response) {
+						decoratePages(response);
+						deferred.resolve(latest);
+					}
+				);
 			}
 			return deferred.promise;
 		};
 
 		var getPages = function () {
-			var deferred = $q.defer();
-			if (pages[0].feed) {
-				deferred.resolve(pages);
-			} else {
-				getFeeds().then(function (response) {
-					angular.forEach(response, function (result) {
-						pages[getPageIndexById(getPageDataByPostId(result[0].post_id).id)].feed = result;
-						latest.push({
-							page: getPageDataByPostId(result[0].post_id),
-							news: result[0]
-						});
-					});
-					deferred.resolve(latest);
-				});
-			}
-			return deferred.promise
-		};
+			var	deferred = $q.defer(),
+				ids = [];
 
-		var getPageById = function (id) {
-			var deferred = $q.defer(),
-				index = getPageIndexById(id);
-			if (pages[index].feed) {
-				deferred.resolve(pages[index]);
+			if (latest.length) {
+				deferred.resolve(latest);
 			} else {
-				getFeed(id).then(
+				angular.forEach(pages, function (page) {ids.push(page.id)});
+				getFeeds(ids.join(',')).then(
 					function (response) {
-						pages[index].feed = response;
-						deferred.resolve(pages[index]);
-					}, function (err) {
-						deferred.reject();
+						decoratePages(response);
+						deferred.resolve(pages);
 					}
 				);
 			}
 			return deferred.promise;
-		}
+		};
+
+		var getPageById = function (id) {
+			var deferred = $q.defer(),
+				index = getPageIndexById(id),
+				ids = [];
+			if (pages[index].feed) {
+				deferred.resolve(pages[index]);
+			} else {
+				angular.forEach(pages, function (page) {ids.push(page.id)});
+				getFeeds(ids.join(',')).then(
+					function (response) {
+						decoratePages(response);
+						deferred.resolve(pages[index]);
+					}
+				);
+			}
+			return deferred.promise;
+		};
+
+		var decoratePages = function (response) {
+			angular.forEach(response, function (data) {
+				angular.forEach(data.feed.data, function (news, index) {
+					news.cssClass = [];
+					if (news.picture && news.type === 'photo') {
+						news.picture_url = 'https://graph.facebook.com/' + news.object_id + '/picture?type=normal';
+						news.cssClass.push('big');
+						
+						news.cssClass.push('square');
+					} else {
+						news.picture_url = news.picture;						
+					}
+					if (news.type === 'video') {
+						news.cssClass.push('big');
+						news.cssClass.push('video');
+					}
+					if (news.story) {
+						news.display_message = news.story;
+					} else {
+						news.display_message = news.message;
+					}
+				});
+				pages[getPageIndexById(data.id)].feed = data.feed.data;
+				pages[getPageIndexById(data.id)].cover = data.cover;
+				pages[getPageIndexById(data.id)].photos = data.photos;
+				pages[getPageIndexById(data.id)].albums = data.albums;
+				pages[getPageIndexById(data.id)].picture = data.picture;
+				pages[getPageIndexById(data.id)].events = data.events;
+				pages[getPageIndexById(data.id)].likes = data.likes;
+				pages[getPageIndexById(data.id)].link = data.link;
+				pages[getPageIndexById(data.id)].name = data.name;
+				pages[getPageIndexById(data.id)].about = data.about;
+				latest.push({
+					page: {
+						name: pages[getPageIndexById(data.id)].name,
+						id: pages[getPageIndexById(data.id)].id,
+						cover: data.cover
+					},
+					news: pages[getPageIndexById(data.id)].feed[0],
+				});
+			});
+		};
+
+		var decoratePhoto = function (item) {
+			var deferred = $q.defer();
+
+		};
+
+		var getDefinedPages = function () {
+			return pages;
+		};
 
 		return {
 			getLatest: getLatest,
 			getPages: getPages,
-			getPageById: getPageById
+			getPageById: getPageById,
+			getDefinedPages: getDefinedPages
 		}
 	});

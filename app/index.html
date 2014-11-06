@@ -22,7 +22,11 @@
 
     <!-- Add your site or application content here -->
     <div class="container">
-      <div ng-view=""></div>
+      <div class="header"></div>
+      <div class="menu">
+        <ng-include src="'views/menu.html'" scope="" onload=""></ng-include>
+      </div>
+      <div class="content" ng-view=""></div>
     </div>
 
 
@@ -84,11 +88,16 @@
     <script src="bower_components/isotope/js/layout-modes/fit-rows.js"></script>
     <script src="bower_components/isotope/js/layout-modes/masonry.js"></script>
     <script src="bower_components/angular-isotope/dist/angular-isotope.js"></script>
+    <script src="bower_components/imagesloaded/imagesloaded.js"></script>
+    <script src="bower_components/angular-masonry/angular-masonry.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/services/fbService.js"></script>

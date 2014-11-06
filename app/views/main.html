@@ -1,17 +1,28 @@
-<div ng-controller="MainCtrl">
-  {{isLoggedIn}}
-  <button ng-if="!isLoggedIn" ng-click="login()">login</button>
-  <ul ng-if="isLoggedIn" class="domiwka">
-    <li class="media" ng-repeat="item in latest">
-      <a class="media-media" href="#/about/{{item.page.id}}">
-        <img style="width: 100%" ng-src="{{getImage($index)}}" />
-      </a>
-      <div class="media-body">
-        <h4 class="media-heading">{{item.news.name}}</h4>
-        <p ng-bind-html="getMessage($index) | linky"></p>
-        <p>{{item.page.name}}</p>
-        <a href="{{item.news.permalink}}">go to facebook</a>
-      </div>
-    </li>
-  </ul>
+<div class="main-content col-md-8">
+  <div class="block">
+    <div class="search">
+      <input type="text" class="form-control" placeholder="search" ng-model="searchNews" />
+    </div>
+  </div>
+  <div class="block feed">
+    <ul ng-if="isLoggedIn" class="domiwka">
+      <li class="media" ng-repeat="item in latest | filter:searchNews" ng-class="getClass(item)">
+        <a ng-if="item.news.picture_url" class="media-media" href="#/about/{{item.page.id}}" style="background-image: url({{item.news.picture_url}})">
+        </a>
+        <a ng-if="!item.news.picture_url" class="media-media" href="#/about/{{item.page.id}}" style="background-image: url({{item.page.picture.data.url}})">
+        </a>
+        <div class="media-body">
+          <a href="#/about/{{item.page.id}}"><h4 class="media-heading">{{item.page.name}}</h4></a>
+          <p ng-bind-html="item.news.display_message"></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="sub-content col-md-4">
+  <div class="block" masonry column-width="50%">
+    <div class="masonry-brick" ng-repeat="item in latest">
+      <img ng-src="{{item.page.cover.source}}" />
+    </div>
+  </div>
 </div>
