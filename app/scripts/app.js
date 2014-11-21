@@ -17,6 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ngFacebook',
+    'ngMaterial',
+    'angular.filter',
     'iso.directives',
     'wu.masonry',
     'ui.bootstrap',
@@ -32,6 +34,10 @@ angular
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
       })
       .when('/about/:id', {
         templateUrl: 'views/about.html',

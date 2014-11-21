@@ -186,10 +186,24 @@ angular.module('uaFacebookApp.fbService', ['ngResource', 'ngFacebook'])
 			return pages;
 		};
 
+		var getUserPages = function () {
+			$facebook.api('/me/likes', {fields: 'id, name, category, picture'}).then(
+				function (response) {
+					console.log(response);
+				}
+			);
+		};
+
+		var setPages = function (data) {
+			pages = data;
+		};
+
 		return {
 			getLatest: getLatest,
 			getPages: getPages,
 			getPageById: getPageById,
-			getDefinedPages: getDefinedPages
+			getDefinedPages: getDefinedPages,
+			getUserPages: getUserPages,
+			setPages: setPages
 		}
 	});

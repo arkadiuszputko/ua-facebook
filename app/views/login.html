@@ -1,0 +1,51 @@
+
+<md-card ng-show="!loggedIn">
+	<button class="login" class="button btn primary" ng-click="login()">Login with facebbok</button>
+</md-card>
+<md-content ng-show="loggedIn" layout="column">
+	<div layout="row" flex="100">
+		<div layout="column" flex="25">
+			<md-content class="md-whiteframe-z1" md-scroll-y>
+				<md-list>
+					<md-item ng-repeat="page in pages">
+						<md-item-content ng-click="pushToChosen(page)">
+							<div class="md-tile-left">
+								<img ng-class="{'md-fab': page.wanted}" ng-src="{{page.picture.data.url}}" class="face" alt="{{page.name}}">
+							</div>
+							<div class="md-tile-content">
+								<h3>{{page.name}}</h3>
+								<h4>{{page.id}}</h4>
+								<p>
+									{{page.category}}
+								</p>
+							</div>
+						</md-item-content>
+					</md-item>
+				</md-list>
+			</md-content>
+		</div>
+		<div flex="66">
+			<section class="chosen-category md-whiteframe-z1" ng-repeat="(key, value) in chosenPages | groupBy: 'category'" flex="50" md-scroll-y>
+				<md-toolbar md-theme="indigo" class="md-default-theme">
+					<form>
+						<div class="column">
+							<md-text-float label="LastName" ng-model="user.lastName" > </md-text-float>
+						</div>
+					</form>
+				</md-toolbar>
+				<md-card class="chosen-page" ng-repeat="page in value" ng-class="{
+					'single': chosenPages.length === 1,
+					'double': chosenPages.length === 2,
+					'triple': chosenPages.length === 3,
+					'quadriple': chosenPages.length === 4,
+					'penta': chosenPages.length > 5}">
+					<img ng-if="chosenPages.length < 5" ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
+					<img ng-src="{{page.picture.data.url}}" class="face undercover" alt="{{page.name}}">
+					<h2>{{page.name}}</h2>
+					<p>{{page.category}}<p>
+				</md-card>
+			</section>
+		</div>
+	</div>
+	<button class="button btn success" ng-click="chosePages()">Choose</button>
+</md-content>
