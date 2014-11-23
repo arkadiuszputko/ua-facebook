@@ -6,6 +6,23 @@ body {
 	max-width: 100%;
 	max-height: 100%;
 }
+.pages {
+	.md-tile-left {
+		position: relative;
+		.check {
+			position: absolute;
+			width: 48px;
+			color: #fff;
+			border: 1px solid #fff;
+			background: rgba(3, 169, 244, .5);
+			border-radius: 30px;
+			top: 16px;
+			left: 16px;
+			text-align: center;
+			line-height: 48px;
+		}
+	}
+}
 .face {
 	border-radius: 30px;
 	border: 1px solid #ddd;

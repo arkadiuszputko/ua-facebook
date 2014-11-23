@@ -2,15 +2,21 @@
 <md-card ng-if="!loggedIn">
 	<button class="login" class="button btn primary" ng-click="login()">Login with facebbok</button>
 </md-card>
-<md-content ng-if="loggedIn" layout="column" layout-fill>
-	<div layout="row" flex="100">
-		<div layout="column" flex="25" class="md-whiteframe-z1">
-			<md-content layout="column" class="" md-scroll-y>
+<md-content ng-if="loggedIn" layout="column" layout-fill layout-align="start">
+	<div layout="row" flex="100" layout-align="start">
+		<div layout="column" layout-align="start" flex="25" class="md-whiteframe-z1">
+			<md-toolbar>
+				<form>
+					<md-text-float label="Search" ng-model="searchPage" > </md-text-float>
+				</form>
+			</md-toolbar>
+			<md-content layout="column" class="pages" md-scroll-y>
 				<md-list>
-					<md-item ng-repeat="page in pages">
+					<md-item ng-repeat="page in pages | filter: searchPage">
 						<md-item-content ng-click="pushToChosen(page)">
 							<div class="md-tile-left">
 								<img ng-class="{'md-fab': page.wanted}" ng-src="{{page.picture.data.url}}" class="face" alt="{{page.name}}">
+								<span class="check" ng-if="page.wanted"><i class="fa fa-check"></i></span>
 							</div>
 							<div class="md-tile-content">
 								<h3>{{page.name}}</h3>

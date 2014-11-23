@@ -8,7 +8,7 @@
  * Controller of the uaFacebookApp
  */
 angular.module('uaFacebookApp')
-    .controller('LoginCtrl', function ($scope, $sce, $facebook, $location, fbService) {
+    .controller('LoginCtrl', function ($scope, $rootScope, $sce, $facebook, $location, fbService) {
         $scope.loggedIn = false;
         $scope.chosenPages = [];
         $scope.login = function () {
@@ -31,7 +31,14 @@ angular.module('uaFacebookApp')
             item.wanted = !item.wanted;
             if (item.wanted) {
                 $scope.chosenPages.push(item);
+            } else {
+                angular.forEach($scope.chosenPages, function (page) {
+                    if (page.id === item.id) {
+                        $scope.chosenPages.splice($scope.chosenPages.indexOf(item), 1);
+                    }
+                });
             }
+            $rootScope.$broadcast('masonry.reload');
         };
 
         $scope.getClass = function (category) {
