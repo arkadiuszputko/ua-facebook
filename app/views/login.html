@@ -1,11 +1,11 @@
 
-<md-card ng-show="!loggedIn">
+<md-card ng-if="!loggedIn">
 	<button class="login" class="button btn primary" ng-click="login()">Login with facebbok</button>
 </md-card>
-<md-content ng-show="loggedIn" layout="column">
+<md-content ng-if="loggedIn" layout="column" layout-fill>
 	<div layout="row" flex="100">
-		<div layout="column" flex="25">
-			<md-content class="md-whiteframe-z1" md-scroll-y>
+		<div layout="column" flex="25" class="md-whiteframe-z1">
+			<md-content layout="column" class="" md-scroll-y>
 				<md-list>
 					<md-item ng-repeat="page in pages">
 						<md-item-content ng-click="pushToChosen(page)">
@@ -24,22 +24,17 @@
 				</md-list>
 			</md-content>
 		</div>
-		<div flex="66">
-			<section class="chosen-category md-whiteframe-z1" ng-repeat="(key, value) in chosenPages | groupBy: 'category'" flex="50" md-scroll-y>
+		<md-content flex="75" layout-fill md-scroll-y layout-padding="10">
+			<section class="chosen-category md-whiteframe-z1" ng-repeat="(key, value) in chosenPages | groupBy: 'category'" flex="50">
 				<md-toolbar md-theme="indigo" class="md-default-theme">
 					<form>
 						<div class="column">
-							<md-text-float label="LastName" ng-model="user.lastName" > </md-text-float>
+							<md-text-float label="Category" ng-model="value[0].category" > </md-text-float>
 						</div>
 					</form>
 				</md-toolbar>
-				<md-card class="chosen-page" ng-repeat="page in value" ng-class="{
-					'single': chosenPages.length === 1,
-					'double': chosenPages.length === 2,
-					'triple': chosenPages.length === 3,
-					'quadriple': chosenPages.length === 4,
-					'penta': chosenPages.length > 5}">
-					<img ng-if="chosenPages.length < 5" ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
+				<md-card class="chosen-page" ng-repeat="page in value" ng-class="getClass(page.category)">
+					<img ng-if="getClass(page.category) != 'penta'" ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
 					<img ng-src="{{page.picture.data.url}}" class="face undercover" alt="{{page.name}}">
 					<h2>{{page.name}}</h2>
 					<p>{{page.category}}<p>
@@ -47,5 +42,4 @@
 			</section>
 		</div>
 	</div>
-	<button class="button btn success" ng-click="chosePages()">Choose</button>
 </md-content>

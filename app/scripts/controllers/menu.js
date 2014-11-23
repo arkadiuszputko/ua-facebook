@@ -9,5 +9,5 @@
  */
 angular.module('uaFacebookApp')
   .controller('MenuCtrl', function ($scope, $sce, $facebook, fbService) {
-  	$scope.pages = fbService.getDefinedPages()
+  	$scope.pages = fbService.getDefinedPages();
   });

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('uaFacebookApp.fbService', ['ngResource', 'ngFacebook'])
 	.factory('fbService', function($q, $facebook){
 		var pages = [

@@ -27,15 +27,15 @@ angular
   ])
   .config( function( $facebookProvider ) {
     $facebookProvider.setAppId('140055362726064');
-    $facebookProvider.setPermissions("email,user_likes,read_stream");
+    $facebookProvider.setPermissions('email,user_likes,read_stream');
   })
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/main', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/login', {
+      .when('/', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
@@ -47,7 +47,7 @@ angular
         redirectTo: '/'
       });
   })
-  .run(function ($rootScope){
+  .run(function (){
     (function(){
      // If we've already installed the SDK, we're done
      if (document.getElementById('facebook-jssdk')) {return;}

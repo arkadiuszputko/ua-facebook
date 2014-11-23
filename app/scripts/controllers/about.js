@@ -14,7 +14,7 @@ angular.module('uaFacebookApp')
             $scope.page = response;
     		console.log(response);
     	},
-    	function (error) {
+    	function () {
 
     	}
     );
@@ -25,7 +25,7 @@ angular.module('uaFacebookApp')
 
     $scope.getCoverPhoto = function (item) {
         item.full = false;
-        return 'https://graph.facebook.com/' + item.cover_photo + '/picture?type=normal'
+        return 'https://graph.facebook.com/' + item.cover_photo + '/picture?type=normal';
     };
 
     $scope.toggle = function (item) {
