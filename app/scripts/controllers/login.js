@@ -62,4 +62,6 @@ angular.module('uaFacebookApp')
 
             return className;
         };
+
+        $scope.login();
     });

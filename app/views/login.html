@@ -24,22 +24,28 @@
 				</md-list>
 			</md-content>
 		</div>
-		<md-content flex="75" layout-fill md-scroll-y layout-padding="10">
-			<section class="chosen-category md-whiteframe-z1" ng-repeat="(key, value) in chosenPages | groupBy: 'category'" flex="50">
-				<md-toolbar md-theme="indigo" class="md-default-theme">
-					<form>
-						<div class="column">
-							<md-text-float label="Category" ng-model="value[0].category" > </md-text-float>
+		<md-content flex="75" layout="column" layout-fill md-scroll-y>
+			<div masonry preserve-order>
+				<section class="chosen-category md-whiteframe-z1 masonry-brick" ng-repeat="(key, value) in chosenPages | groupBy: 'category'">
+					<md-toolbar md-theme="indigo" class="md-default-theme toolbar">
+						<form>
+							<div class="column">
+								<md-text-float label="Category" ng-model="value[0].category" > </md-text-float>
+							</div>
+						</form>
+					</md-toolbar>
+					<div class="chosen-page" ng-repeat="page in value" ng-class="getClass(page.category)">
+						<div class="cover md-whiteframe-z1" ng-if="getClass(page.category) != 'penta'">
+							<img ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
 						</div>
-					</form>
-				</md-toolbar>
-				<md-card class="chosen-page" ng-repeat="page in value" ng-class="getClass(page.category)">
-					<img ng-if="getClass(page.category) != 'penta'" ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
-					<img ng-src="{{page.picture.data.url}}" class="face undercover" alt="{{page.name}}">
-					<h2>{{page.name}}</h2>
-					<p>{{page.category}}<p>
-				</md-card>
-			</section>
+						<img ng-src="{{page.picture.data.url}}" class="face undercover md-whiteframe-z2" alt="{{page.name}}">
+						<div class="info">
+							<h2>{{page.name}}</h2>
+							<p>{{page.category}}<p>
+						</div>
+					</mdiv>
+				</section>
+			</div>
 		</div>
 	</div>
 </md-content>
