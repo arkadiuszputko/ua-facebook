@@ -10,7 +10,7 @@
 					<md-text-float label="Search" ng-model="searchPage" > </md-text-float>
 				</form>
 			</md-toolbar>
-			<md-content layout="column" class="pages" md-scroll-y>
+			<md-content layout="column" class="pages" md-scroll-y infinite-scroll="getPages()" infinite-scroll-distance='2'>
 				<md-list>
 					<md-item ng-repeat="page in pages | filter: searchPage">
 						<md-item-content ng-click="pushToChosen(page)">

@@ -11,20 +11,32 @@ angular.module('uaFacebookApp')
     .controller('LoginCtrl', function ($scope, $rootScope, $sce, $facebook, $location, fbService) {
         $scope.loggedIn = false;
         $scope.chosenPages = [];
+        $scope.pages = [];
+        var offset = 0,
+            allPages = false;
         $scope.login = function () {
             $facebook.login().then(function(response) {
                 $scope.loggedIn = true;
-                $facebook.api('/me/likes?limit=150', {fields: 'id, name, category, picture, cover'}).then(
-                    function (response) {
-                        $scope.pages = response.data;
-                    }
-                );
+                $scope.getPages();
             });
         };
 
         $scope.chosePages = function () {
             fbService.setPages(chosenPages);
             $location.path('main');
+        };
+
+        $scope.getPages = function () {
+            fbService.getUserPages(offset).then(
+                function (response) {
+                    $scope.pages = $scope.pages.concat(response.data);
+                    if (response.data.length !== 100) {
+                        allPages = true;
+                    } else {
+                        offset = offset + 100;
+                    }
+                }
+            );
         };
 
         $scope.pushToChosen = function (item) {

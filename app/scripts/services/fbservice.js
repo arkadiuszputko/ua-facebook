@@ -188,12 +188,8 @@ angular.module('uaFacebookApp.fbService', ['ngResource', 'ngFacebook'])
 			return pages;
 		};
 
-		var getUserPages = function () {
-			$facebook.api('/me/likes', {fields: 'id, name, category, picture'}).then(
-				function (response) {
-					console.log(response);
-				}
-			);
+		var getUserPages = function (offset) {
+			return $facebook.api('/me/likes?limit=100&offset=' + offset, {fields: 'id, name, category, picture, cover, about'})
 		};
 
 		var setPages = function (data) {

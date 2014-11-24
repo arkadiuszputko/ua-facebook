@@ -23,6 +23,7 @@ angular
     'wu.masonry',
     'ui.bootstrap',
     'youtube-embed',
+    'infinite-scroll',
     'uaFacebookApp.fbService'
   ])
   .config( function( $facebookProvider ) {
