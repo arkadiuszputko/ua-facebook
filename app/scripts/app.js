@@ -18,6 +18,7 @@ angular
     'ngTouch',
     'ngFacebook',
     'ngMaterial',
+    'ngDragDrop',
     'angular.filter',
     'iso.directives',
     'wu.masonry',

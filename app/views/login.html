@@ -1,8 +1,8 @@
 
-<md-card ng-if="!loggedIn">
+<md-card ng-show="!loggedIn">
 	<button class="login" class="button btn primary" ng-click="login()">Login with facebbok</button>
 </md-card>
-<md-content ng-if="loggedIn" layout="column" layout-fill layout-align="start">
+<md-content ng-show="loggedIn" layout="column" layout-fill layout-align="start">
 	<div layout="row" flex="100" layout-align="start">
 		<div layout="column" layout-align="start" flex="25" class="md-whiteframe-z1">
 			<md-toolbar>
@@ -10,7 +10,7 @@
 					<md-text-float label="Search" ng-model="searchPage" > </md-text-float>
 				</form>
 			</md-toolbar>
-			<md-content layout="column" class="pages" md-scroll-y infinite-scroll="getPages()" infinite-scroll-distance='2'>
+			<md-content layout="column" class="pages" md-scroll-y>
 				<md-list>
 					<md-item ng-repeat="page in pages | filter: searchPage">
 						<md-item-content ng-click="pushToChosen(page)">
@@ -30,26 +30,38 @@
 				</md-list>
 			</md-content>
 		</div>
-		<md-content flex="75" layout="column" layout-fill md-scroll-y>
-			<div masonry preserve-order>
-				<section class="chosen-category md-whiteframe-z1 masonry-brick" ng-repeat="(key, value) in chosenPages | groupBy: 'category'">
+		<md-content flex="75" layout="column" layout-fill md-scroll-y class="chosen-pages">
+			<div preserve-order >
+				<section class="chosen-category md-whiteframe-z1" ng-repeat="cat in chosenCategories" data-drop="true" jqyoui-droppable="{onDrop: 'dropped(cat)'}">
 					<md-toolbar md-theme="indigo" class="md-default-theme toolbar">
 						<form>
 							<div class="column">
-								<md-text-float label="Category" ng-model="value[0].category" > </md-text-float>
+								<md-text-float label="Category" ng-model="cat.name" > </md-text-float>
 							</div>
 						</form>
 					</md-toolbar>
-					<div class="chosen-page" ng-repeat="page in value" ng-class="getClass(page.category)">
-						<div class="cover md-whiteframe-z1" ng-if="getClass(page.category) != 'penta'">
+					<div class="chosen-page" 
+						ng-repeat="page in cat.pages"
+						ng-class="cat.className"
+						data-drag="true"
+						ng-model="cat.pages"
+						jqyoui-draggable="{onStart: 'dragStart(page)', onStop: 'dragStop()'}"
+						data-jqyoui-options="{ helper: 'clone', containment: 'window' }"
+						>
+						<div class="cover md-whiteframe-z1" ng-if="cat.className != 'penta'">
 							<img ng-src="{{page.cover.source}}" class="cover" alt="{{page.name}}">
 						</div>
 						<img ng-src="{{page.picture.data.url}}" class="face undercover md-whiteframe-z2" alt="{{page.name}}">
 						<div class="info">
 							<h2>{{page.name}}</h2>
-							<p>{{page.category}}<p>
+							<p>{{page.category}}</p>
 						</div>
-					</mdiv>
+						<div class="bottom-sheet">
+							<span class="move" ng-mousedown="changeMode('move')"><i class="fa fa-arrows"></i></span>
+							<span class="clone" ng-mousedown="changeMode('clone')"><i class="fa fa-copy"></i></span>
+							<span class="remove" ng-click="removePage(page)"><i class="fa fa-trash"></i></span>
+						</div>
+					</div>
 				</section>
 			</div>
 		</div>

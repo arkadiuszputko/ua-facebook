@@ -39,6 +39,8 @@ body {
 	padding: 0;
 	overflow-x: hidden;
 	overflow-y: auto;
+	float: left;
+	height: 320px;
 	.toolbar {
 		padding: 0 1em;
 		label, input {
@@ -47,6 +49,34 @@ body {
 	}
 	.chosen-page {
 		position: relative;
+		.bottom-sheet {
+			display: none;
+			position: absolute;
+			bottom: 0;
+			height: 100px;
+			background: #fff;
+			width: 100%;
+			text-align: center;
+			span {
+				width: 48px;
+				color: #fff;
+				border: 1px solid #fff;
+				background: rgba(3, 169, 244, .5);
+				border-radius: 30px;
+				text-align: center;
+				line-height: 48px;
+				display: inline-block;
+				margin: 16px;
+				box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+				&:hover {
+					background: rgb(3, 169, 244);
+					box-shadow: none;
+				}
+			}
+		}
+		&:hover .bottom-sheet {
+			display: block;
+		}
 		&.single {
 			div.cover {
 				width: 100%;
@@ -75,6 +105,7 @@ body {
 		&.double {
 			width: 50%;
 			float: left;
+			height: 100%;
 			div.cover {
 				width: 100%;
 				height: 80px;
@@ -146,7 +177,7 @@ body {
 				font-size: .6em;
 			}
 		}
-		&.quadriple {
+		&.quadriple, &.drag {
 			width: 50%;
 			height: 160px;
 			float: left;
