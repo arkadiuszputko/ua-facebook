@@ -12,7 +12,7 @@ angular.module('uaFacebookApp')
     fbService.getPageById($routeParams.id).then(
     	function (response) {
             $scope.page = response;
-    		console.log(response);
+    		console.log("dupa",response);
     	},
     	function (error) {
 
